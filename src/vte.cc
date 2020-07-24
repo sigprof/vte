@@ -9206,10 +9206,10 @@ Terminal::paint_cursor()
 			} else {
 				/* draw a box around the character */
                                 _vte_draw_draw_rectangle(m_draw,
-							     x - VTE_LINE_WIDTH,
-							     y - VTE_LINE_WIDTH,
-							     cursor_width + 2*VTE_LINE_WIDTH,
-                                                         height + 2*VTE_LINE_WIDTH,
+							     x,
+							     y,
+							     cursor_width,
+                                                         height,
                                                          &bg, VTE_DRAW_OPAQUE);
 			}
 
