@@ -86,7 +86,24 @@ static inline void vte_color_triple_get(vte_color_triple_t ct,
                                         uint32_t* back,
                                         uint32_t* deco)
 {
-        *fore = vte_color_triple_get_fore(ct);
-        *back = vte_color_triple_get_back(ct);
-        *deco = vte_color_triple_get_deco(ct);
+        uint32_t c_fore = vte_color_triple_get_fore(ct);
+        uint32_t c_back = vte_color_triple_get_back(ct);
+        uint32_t c_deco = vte_color_triple_get_deco(ct);
+
+	if (c_back >= VTE_LEGACY_COLORS_OFFSET && c_back <= VTE_LEGACY_COLORS_OFFSET + VTE_LEGACY_FULL_COLOR_SET_SIZE) {
+		if (c_fore == VTE_DEFAULT_FG) {
+			if ((c_back - VTE_LEGACY_COLORS_OFFSET) % 4 == 0) {
+				c_fore = VTE_VGA_COLORS_OFFSET + 7;
+			} else {
+				c_fore = VTE_VGA_COLORS_OFFSET + 0;
+			}
+		} else if (c_fore >= VTE_LEGACY_COLORS_OFFSET && c_fore <= VTE_LEGACY_COLORS_OFFSET + VTE_LEGACY_FULL_COLOR_SET_SIZE) {
+			c_fore += VTE_VGA_COLORS_OFFSET - VTE_LEGACY_COLORS_OFFSET;
+		}
+		c_back += VTE_VGA_COLORS_OFFSET - VTE_LEGACY_COLORS_OFFSET;
+	}
+
+        *fore = c_fore;
+        *back = c_back;
+        *deco = c_deco;
 }
